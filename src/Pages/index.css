@@ -1,0 +1,18 @@
+  .resize_parent_box{
+       display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+ 
+  .resize_box{ 
+    background-color: #fff;
+    box-shadow: 0 2px 5px 1px rgba(64,60,67,.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: col-resize;
+  }
+  .box_text{
+    font-size : 30px;
+  }

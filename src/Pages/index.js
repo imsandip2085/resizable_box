@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import './styledComponent.js';
+import './index.css';
 import { getContainerSize } from '../Constants/getDimension';
-import {debounce} from '../Constants/debounce';
-import { ParentResizableBox } from './styledComponent';
 
 function ResizableBox() {
     const [dimension, setDimension] = useState({
@@ -14,36 +12,62 @@ function ResizableBox() {
         setDimension({ ...dimension, screenHeight: result.screenHeight, screenWidth: result.screenWidth })
     }, []);
 
+
+
     const panel = document.getElementById("resizavle_div");
-    let m_pos;
-    function resize(e) {
-        const dx = m_pos - e.x;
-        m_pos = e.x;
-        panel.style.width = (parseInt(getComputedStyle(panel, '').width) - dx) + "px";
-      
-    }
+    debounce(function resize(e) {
+        if (window.event.clientX > dimension.screenWidth / 2) {
+            panel.style.width = 2 * (window.event.clientX - dimension.screenWidth / 2) + "px";
+        } else {
+            panel.style.width = -2 * (window.event.clientX - dimension.screenWidth / 2) + "px";
+        }
+    }, 500)
+
     if (panel) {
-        panel.addEventListener("mousedown", debounce(function (e) {
-            m_pos = e.x;
-            document.addEventListener("mousemove", resize, false);
-        }, 500), false);
+        panel.addEventListener("mousedown", function (e) {
+            document.addEventListener("mousemove", resize(), false);
+        }, false);
 
-        document.addEventListener("mouseup", debounce(function () {
-            document.removeEventListener("mousemove", resize, false);
-        }, 500), false);
+        document.addEventListener("mouseup", function () {
+            document.removeEventListener("mousemove", resize(), false);
+        }, false);
     }
 
+    const debounce = (func, wait) => {
+        let timeout;
+
+        // This is the function that is returned and will be executed many times
+        // We spread (...args) to capture any number of parameters we want to pass
+        return function executedFunction(...args) {
+
+            // The callback function to be executed after 
+            // the debounce time has elapsed
+            const later = () => {
+                // null timeout to indicate the debounce ended
+                timeout = null;
+
+                // Execute the callback
+                func(...args);
+            };
+            // This will reset the waiting every function execution.
+            // This is the step that prevents the function from
+            // being executed because it will never reach the 
+            // inside of the previous setTimeout  
+            clearTimeout(timeout);
+
+            // Restart the debounce waiting period.
+            // setTimeout returns a truthy value (it differs in web vs Node)
+            timeout = setTimeout(later, wait);
+        };
+    };
 
 
 
     return (
-        <div id="side">
-
-            <ParentResizableBox height={`${dimension.screenHeight / 2}px`} width={`${dimension.screenWidth / 2}px`}>
-                <div className="resize_box" id="resizavle_div">
-                    <p className="box_text">ResizableBox</p>
-                </div>
-            </ParentResizableBox>
+        <div id="side" className="resize_parent_box" >
+            <div className="resize_box" id="resizavle_div" style={{ width: `${dimension.screenWidth / 2}px`, height: `${dimension.screenHeight / 2}px` }}>
+                <p className="box_text">ResizableBox</p>
+            </div>
         </div>
     )
 }
