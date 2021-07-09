@@ -40,10 +40,8 @@ function ResizableBox() {
         <div id="side">
 
             <ParentResizableBox height={`${dimension.screenHeight / 2}px`} width={`${dimension.screenWidth / 2}px`}>
-                {/* <div className="parentresize_box"> */}
                 <div className="resize_box" id="resizavle_div">
                     <p className="box_text">ResizableBox</p>
-                {/* </div> */}
                 </div>
             </ParentResizableBox>
         </div>
