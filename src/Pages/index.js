@@ -26,11 +26,11 @@ function ResizableBox() {
 
     if (panel) {
         panel.addEventListener("mousedown", function (e) {
-            document.addEventListener("mousemove",debounce(resizableWindow,100 ) , false);
+            document.addEventListener("mousemove",debounce(resizableWindow,200 ) , false);
         }, false);
 
         document.addEventListener("mouseup", function () {
-            document.removeEventListener("mousemove", debounce(resizableWindow,100) , false);
+            document.removeEventListener("mousemove", debounce(resizableWindow,200) , false);
         }, false);
     }
 
